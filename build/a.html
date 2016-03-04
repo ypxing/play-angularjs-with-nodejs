@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script>
+app = angular.module('app', ['ng'])
+app.directive('abc', ['$timeout', function($timeout) {
+  return {
+    require: 'ngModel',
+/*
+    scope: {
+    },
+*/
+    link: function(scope, element, attrs, ngModelCtrl) {
+      ngModelCtrl.$render = function() {
+        console.log('ddd')
+        element.html(ngModelCtrl.$viewValue)
+      }
+
+      ngModelCtrl.$formatters.push(function(modelValue) {
+        return modelValue;
+      })
+
+      ngModelCtrl.$parsers.push(function(viewValue) {
+//        ngModelCtrl.$render();
+        return viewValue;
+      })
+
+      $timeout(function() {
+        scope.$evalAsync(function(){
+          console.log('here')
+          ngModelCtrl.$setViewValue(4)
+        })
+      }, 1000)
+
+    }
+  }
+}])
+.controller('zzz', function($scope) {
+  $scope.a = {
+    b: 1
+  }
+})
+    </script>
+  </head>
+  <body ng-app='app'>
+    <div ng-controller="zzz">
+      <label>Name:</label>
+      <div ng-model="a.b" abc></div>
+      <div>{{a.b}}</div>
+      <input type="text" ng-model="a.b">
+      <hr>
+    </div>
+  </body>
+</html>
