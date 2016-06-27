@@ -27,8 +27,13 @@ var child = $rootScope.$new();
 console.log($rootScope === child.$parent)
 
 child.$watch('myProperty', function(newP, oldP) {
-  console.log('here?');
+  console.log(newP, oldP);
 });
+
+child.$apply()
 
 child.myProperty = 't';
 child.$apply()
+
+child.myProperty = 'z';
+child.$apply();
